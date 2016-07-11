@@ -1,0 +1,19 @@
+{
+  "name": "application-data-api-demo",
+  "version": "1.0.0",
+  "description": "Using the OAuth 2.0 flow to get data from the application and data APIs.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Brightspace/application-data-api-demo.git"
+  },
+  "author": "D2L Corporation",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/Brightspace/application-data-api-demo/issues"
+  },
+  "homepage": "https://github.com/Brightspace/application-data-api-demo#readme"
+}
