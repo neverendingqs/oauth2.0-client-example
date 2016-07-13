@@ -18,6 +18,7 @@ var cookieName = "application-data-api-demo",
 };
 
 app.set('view engine', 'ejs');
+app.enable('trust proxy');
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(csrf({ cookie: true }));
