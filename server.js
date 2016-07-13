@@ -63,12 +63,16 @@ app.get('/callback', function(req, res) {
     }, getData);
 
     function getData(error, result) {
-        if (error) { console.log('Access Token Error', error.message); }
-        var token = oauth2.accessToken.create(result).token;
-        // save token.refresh_token here to a user context
+        if (error) {
+            console.log('Access Token Error', error.message);
+            res.redirect('/');
+        } else {
+            var token = oauth2.accessToken.create(result).token;
+            // save token.refresh_token here to a user context
 
-        res.cookie(cookieName, { accessToken: token.access_token }, cookieOptions);
-        res.redirect('/data');
+            res.cookie(cookieName, { accessToken: token.access_token }, cookieOptions);
+            res.redirect('/data');
+        }
     }
 });
 
