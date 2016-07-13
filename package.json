@@ -4,6 +4,7 @@
   "description": "Using the OAuth 2.0 flow to get data from the application and data APIs.",
   "main": "server.js",
   "scripts": {
+    "dev": "gulp dev",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -15,5 +16,20 @@
   "bugs": {
     "url": "https://github.com/Brightspace/application-data-api-demo/issues"
   },
-  "homepage": "https://github.com/Brightspace/application-data-api-demo#readme"
+  "homepage": "https://github.com/Brightspace/application-data-api-demo#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-cli": "^1.2.1",
+    "gulp-env": "^0.4.0",
+    "gulp-nodemon": "^2.1.0",
+    "openssl-self-signed-certificate": "^1.1.4"
+  },
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "cookie-parser": "^1.4.3",
+    "csurf": "^1.9.0",
+    "ejs": "^2.4.2",
+    "express": "^4.14.0",
+    "simple-oauth2": "^0.7.0"
+  }
 }
