@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "dev": "gulp dev",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jshint ."
   },
   "repository": {
     "type": "git",
@@ -22,7 +22,8 @@
     "gulp-cli": "^1.2.1",
     "gulp-env": "^0.4.0",
     "gulp-nodemon": "^2.1.0",
-    "openssl-self-signed-certificate": "^1.1.4"
+    "openssl-self-signed-certificate": "^1.1.4",
+    "jshint": "^2.9.2"
   },
   "dependencies": {
     "body-parser": "^1.15.2",
