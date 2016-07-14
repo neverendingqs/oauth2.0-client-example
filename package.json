@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "dev": "gulp dev",
+    "start": "node server.js",
     "test": "jshint ."
   },
   "repository": {
