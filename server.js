@@ -84,16 +84,18 @@ app.get('/data', function(req, res) {
         .set('Authorization', `Bearer ${access_token}`)
         .end(function(courseAccessError, courseAccessResponse) {
             if (courseAccessError) {
-                console.log(courseAccessError);
-                res.send(courseAccessError);
+                var error = JSON.stringify(courseAccessError, null, 2);
+                console.log(error);
+                res.send(`<pre>${error}</pre>`);
             } else {
                   request
                     .get(process.env.COURSE_INFO_ROUTE)
                     .set('Authorization', `Bearer ${access_token}`)
                     .end(function(courseInfoError, courseInfoResponse) {
                         if (courseInfoError) {
-                            console.log(courseInfoError);
-                            res.send(courseInfoError);
+                            var error = JSON.stringify(courseInfoError, null, 2);
+                            console.log(error);
+                            res.send(`<pre>${error}</pre>`);
                         } else {
                             var locals = {
                                 info: JSON.stringify(JSON.parse(courseInfoResponse.text), null, 2),
