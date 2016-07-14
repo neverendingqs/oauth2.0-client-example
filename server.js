@@ -101,7 +101,6 @@ app.get('/data', function(req, res) {
                                 info: JSON.stringify(JSON.parse(courseInfoResponse.text), null, 2),
                                 data: JSON.stringify(JSON.parse(courseAccessResponse.text), null, 2)
                             };
-                            console.log(locals);
                             res.render('data', locals);
                         }
                     });
