@@ -82,8 +82,28 @@ app.get('/data', function(req, res) {
     request
         .get(process.env.COURSE_ACCESS_ROUTE)
         .set('Authorization', `Bearer ${access_token}`)
-        .end(function(err, courseAccessResponse) {
-            res.send(courseAccessResponse.text);
+        .end(function(courseAccessError, courseAccessResponse) {
+            if (courseAccessError) {
+                console.log(courseAccessError);
+                res.send(courseAccessError);
+            } else {
+                  request
+                    .get(process.env.COURSE_INFO_ROUTE)
+                    .set('Authorization', `Bearer ${access_token}`)
+                    .end(function(courseInfoError, courseInfoResponse) {
+                        if (courseInfoError) {
+                            console.log(courseInfoError);
+                            res.send(courseInfoError);
+                        } else {
+                            var locals = {
+                                info: JSON.stringify(JSON.parse(courseInfoResponse.text), null, 2),
+                                data: JSON.stringify(JSON.parse(courseAccessResponse.text), null, 2)
+                            };
+                            console.log(locals);
+                            res.render('data', locals);
+                        }
+                    });
+            }
         });
 });
 
