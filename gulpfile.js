@@ -8,7 +8,7 @@ gulp.task('dev', function() {
     });
 
     nodemon({
-        script: 'server.js',
+        script: 'server-local.js',
         ext: 'js html'
     });
 });
