@@ -28,7 +28,7 @@ var oauth2 = require('simple-oauth2')({
     site: process.env.AUTH_SITE,
     tokenPath: process.env.TOKEN_PATH,
     authorizationPath: process.env.AUTHORIZATION_PATH,
-    // currently only accept credentials in the header
+    // authorization service only accept credentials in the header (https://tools.ietf.org/html/rfc6749#section-2.3.1)
     useBasicAuthorizationHeader: true,
     useBodyAuth: false
 });
