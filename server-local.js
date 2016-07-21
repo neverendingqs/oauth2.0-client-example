@@ -1,3 +1,6 @@
+/*
+ * Purely for local development purposes, as the redirect URI must be HTTPS
+ */
 var https = require('https');
 var selfSigned = require('openssl-self-signed-certificate');
 

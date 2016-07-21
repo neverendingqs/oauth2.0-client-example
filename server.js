@@ -28,7 +28,7 @@ var oauth2 = require('simple-oauth2')({
     site: process.env.AUTH_SITE,
     tokenPath: process.env.TOKEN_PATH,
     authorizationPath: process.env.AUTHORIZATION_PATH,
-    // authorization service only accept credentials in the header (https://tools.ietf.org/html/rfc6749#section-2.3.1)
+    // We only accept client credentials in the header (https://tools.ietf.org/html/rfc6749#section-2.3.1)
     useBasicAuthorizationHeader: true,
     useBodyAuth: false
 });
@@ -67,10 +67,12 @@ app.get('/callback', function(req, res) {
             console.log('Access Token Error', error.message);
             res.redirect('/');
         } else {
+            // We are storing token.access_token as a cookie for simplicity, but the user agent should never have to see it
             var token = oauth2.accessToken.create(result).token;
-            // save token.refresh_token here to a user context
-
             res.cookie(cookieName, { accessToken: token.access_token }, cookieOptions);
+
+            // Optionally, store the refresh token (token.refresh_token) to a user context (https://tools.ietf.org/html/rfc6749#section-6)
+
             res.redirect('/data');
         }
     }
