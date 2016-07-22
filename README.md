@@ -1,5 +1,5 @@
 # application-data-api-demo
-Using the OAuth 2.0 flow via [simple-oauth2](https://github.com/lelylan/simple-oauth2) to get data from the application and data APIs.
+Using the OAuth 2.0 flow to get data from the application and data APIs.
 
 ## Environment Variables
 If running locally, ensure `.devenv.json` contains the following values:

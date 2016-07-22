@@ -4,10 +4,14 @@ var express = require('express'),
     cookieParser = require('cookie-parser'),
     csrf = require('csurf');
 
+var querystring = require('querystring');
 var request = require('superagent');
 
 var port = process.env.PORT || 3000;
 var defaultScope = 'Analytics:MetronAPI:CreateGetDeleteAggregators,NoSQL core:*:*';
+
+var authCodeEndpoint = process.env.AUTH_SITE + process.env.AUTHORIZATION_PATH;
+var tokenEndpoint = process.env.AUTH_SITE + process.env.TOKEN_PATH;
 var getRedirectUri = function(req) { return req.protocol + "://" + req.headers.host + "/callback"; };
 
 var cookieName = "application-data-api-demo",
@@ -22,17 +26,6 @@ app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(csrf({ cookie: true }));
 
-var oauth2 = require('simple-oauth2')({
-    clientID: process.env.CLIENT_ID,
-    clientSecret: process.env.CLIENT_SECRET,
-    site: process.env.AUTH_SITE,
-    tokenPath: process.env.TOKEN_PATH,
-    authorizationPath: process.env.AUTHORIZATION_PATH,
-    // We only accept client credentials in the header (https://tools.ietf.org/html/rfc6749#section-2.3.1)
-    useBasicAuthorizationHeader: true,
-    useBodyAuth: false
-});
-
 app.get('/', function(req, res) {
     var locals = {
         csrfToken: req.csrfToken(),
@@ -43,39 +36,50 @@ app.get('/', function(req, res) {
 });
 
 app.post('/auth', function(req, res) {
-    var authorization_uri = oauth2.authCode.authorizeURL({
+    // Authorization Request: https://tools.ietf.org/html/rfc6749#section-4.1.1
+    var authCodeParams = querystring.stringify({
+        response_type: "code",
         redirect_uri: getRedirectUri(req),
+        client_id: process.env.CLIENT_ID,
         scope: req.body.scope,
         // Generate a secure state in production to prevent CSRF (https://tools.ietf.org/html/rfc6749#section-10.12)
         state: "f4c269a0-4a69-43c1-9405-86209c896fa0"
     });
 
-    res.redirect(authorization_uri);
+    res.redirect(authCodeEndpoint + "?" + authCodeParams);
 });
 
 app.get('/callback', function(req, res) {
+    // Authorization Response: https://tools.ietf.org/html/rfc6749#section-4.1.2
     // Validate req.query.state before continuing in production to prevent CSRF (https://tools.ietf.org/html/rfc6749#section-10.12)
-    var code = req.query.code;
+    var authorizationCode = req.query.code;
 
-    oauth2.authCode.getToken({
-        code: code,
-        redirect_uri: getRedirectUri(req)
-    }, getData);
+    // Access Token Request: https://tools.ietf.org/html/rfc6749#section-4.1.3
+    var payload = {
+        grant_type: "authorization_code",
+        redirect_uri: getRedirectUri(req),
+        code: authorizationCode
+    };
 
-    function getData(error, result) {
-        if (error) {
-            console.log('Access Token Error', error.message);
-            res.redirect('/');
-        } else {
-            // We are storing token.access_token as a cookie for simplicity, but the user agent should never have to see it
-            var token = oauth2.accessToken.create(result).token;
-            res.cookie(cookieName, { accessToken: token.access_token }, cookieOptions);
+    request
+        .post(tokenEndpoint)
+        .auth(process.env.CLIENT_ID, process.env.CLIENT_SECRET)
+        .type('form')
+        .send(payload)
+        .end(function(err, postResponse) {
+            if (err) {
+                console.log('Access Token Error', error.message);
+                res.redirect('/');
+            } else {
+                // Access Token Response: https://tools.ietf.org/html/rfc6749#section-4.1.4
+                // We are storing the access token in a cookie for simplicity, but the user agent should never have to see it
+                res.cookie(cookieName, { accessToken: postResponse.body.access_token }, cookieOptions);
 
-            // Optionally, store the refresh token (token.refresh_token) to a user context (https://tools.ietf.org/html/rfc6749#section-6)
+                // Optionally, store the refresh token (postResponse.body.refresh_token) to a user context (https://tools.ietf.org/html/rfc6749#section-6)
 
-            res.redirect('/data');
-        }
-    }
+                res.redirect('/data');
+            }
+        });
 });
 
 app.get('/data', function(req, res) {
