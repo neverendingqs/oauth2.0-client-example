@@ -100,8 +100,8 @@ app.get('/data', function(req, res) {
                             res.send(`<pre>${error}</pre>`);
                         } else {
                             var locals = {
-                                info: JSON.stringify(JSON.parse(courseInfoResponse.text), null, 2),
-                                data: JSON.stringify(JSON.parse(courseAccessResponse.text), null, 2)
+                                info: JSON.stringify(JSON.parse(courseInfoResponse.text || '{}'), null, 2),
+                                data: JSON.stringify(JSON.parse(courseAccessResponse.text || '{}'), null, 2)
                             };
                             res.render('data', locals);
                         }
