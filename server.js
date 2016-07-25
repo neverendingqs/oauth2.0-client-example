@@ -63,7 +63,9 @@ app.get('/callback', function(req, res) {
 
     request
         .post(tokenEndpoint)
+        // Authenticate via HTTP Basic authentication scheme: https://tools.ietf.org/html/rfc6749#section-2.3.1
         .auth(process.env.CLIENT_ID, process.env.CLIENT_SECRET)
+        // Using application/x-www-form-urlencoded as per https://tools.ietf.org/html/rfc6749#section-4.1.3
         .type('form')
         .send(payload)
         .end(function(err, postResponse) {
