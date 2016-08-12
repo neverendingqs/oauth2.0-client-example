@@ -88,30 +88,16 @@ app.get('/data', function(req, res) {
     var access_token = req.cookies[cookieName].accessToken;
 
     request
-        .get(process.env.COURSE_ACCESS_ROUTE)
+        .get(process.env.RESOURCE_ENDPOINT)
         .set('Authorization', `Bearer ${access_token}`)
-        .end(function(courseAccessError, courseAccessResponse) {
-            if (courseAccessError) {
-                var error = JSON.stringify(courseAccessError, null, 2);
-                console.log(error);
-                res.send(`<pre>${error}</pre>`);
+        .end(function(error, response) {
+            if (error) {
+                var errorMessage = JSON.stringify(error, null, 2);
+                console.log(errorMessage);
+                res.send(`<pre>${errorMessage}</pre>`);
             } else {
-                  request
-                    .get(process.env.COURSE_INFO_ROUTE)
-                    .set('Authorization', `Bearer ${access_token}`)
-                    .end(function(courseInfoError, courseInfoResponse) {
-                        if (courseInfoError) {
-                            var error = JSON.stringify(courseInfoError, null, 2);
-                            console.log(error);
-                            res.send(`<pre>${error}</pre>`);
-                        } else {
-                            var locals = {
-                                info: JSON.stringify(JSON.parse(courseInfoResponse.text || '{}'), null, 2),
-                                data: JSON.stringify(JSON.parse(courseAccessResponse.text || '{}'), null, 2)
-                            };
-                            res.render('data', locals);
-                        }
-                    });
+                var locals = { data: JSON.stringify(JSON.parse(response.text || '{}'), null, 2) };
+                res.render('data', locals);
             }
         });
 });

@@ -10,8 +10,7 @@ If running locally, ensure `.devenv.json` contains the following values:
 	    "AUTH_SITE": "https://auth.brightspace.com",
 	    "TOKEN_PATH": "/core/connect/token",
 	    "AUTHORIZATION_PATH": "/oauth2/auth",
-	    "COURSE_ACCESS_ROUTE": "<data API endpoint for Course Access data>",
-	    "COURSE_INFO_ROUTE": "https://<brightspace_instance>/d2l/api/lp/1.10/courses/<org_unit_id>"
+	    "RESOURCE_ENDPOINT": "<resource_endpoint>"
 	}
 
 Otherwise, ensure these environment variable exists on the host machine.
