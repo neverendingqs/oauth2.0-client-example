@@ -10,8 +10,9 @@ var request = require('superagent');
 var port = process.env.PORT || 3000;
 var defaultScope = 'Analytics:MetronAPI:CreateGetDeleteAggregators,NoSQL core:*:*';
 
-var authCodeEndpoint = process.env.AUTH_SITE + process.env.AUTHORIZATION_PATH;
-var tokenEndpoint = process.env.AUTH_SITE + process.env.TOKEN_PATH;
+var authService = process.env.AUTH_SITE || "https://auth.brightspace.com";
+var authCodeEndpoint = authService + "/oauth2/auth";
+var tokenEndpoint = authService + "/core/connect/token";
 var getRedirectUri = function(req) { return req.protocol + "://" + req.headers.host + "/callback"; };
 
 var cookieName = "application-data-api-demo",
