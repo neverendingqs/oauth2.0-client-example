@@ -8,7 +8,7 @@ var querystring = require('querystring');
 var request = require('superagent');
 
 var port = process.env.PORT || 3000;
-var defaultScope = 'Analytics:MetronAPI:CreateGetDeleteAggregators,NoSQL core:*:*';
+var defaultScope = 'core:*:*';
 
 var authService = process.env.AUTH_SITE || "https://auth.brightspace.com";
 var authCodeEndpoint = authService + "/oauth2/auth";
