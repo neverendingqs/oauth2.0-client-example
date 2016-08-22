@@ -63,7 +63,7 @@ app.get('/callback', function(req, res) {
         .send(payload)
         .end(function(err, postResponse) {
             if (err) {
-                console.log('Access Token Error', error.message);
+                console.log('Access Token Error', err.response || err);
                 res.redirect('/');
             } else {
                 // Access Token Response: https://tools.ietf.org/html/rfc6749#section-4.1.4
