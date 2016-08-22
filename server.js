@@ -1,14 +1,12 @@
 var express = require('express'),
     app = express(),
     bodyParser = require('body-parser'),
-    cookieParser = require('cookie-parser'),
-    csrf = require('csurf');
+    cookieParser = require('cookie-parser');
 
 var querystring = require('querystring');
 var request = require('superagent');
 
 var port = process.env.PORT || 3000;
-var defaultScope = 'core:*:*';
 
 var authService = process.env.AUTH_SITE || "https://auth.brightspace.com";
 var authCodeEndpoint = authService + "/oauth2/auth";
@@ -25,24 +23,18 @@ app.set('view engine', 'ejs');
 app.enable('trust proxy');
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(csrf({ cookie: true }));
 
 app.get('/', function(req, res) {
-    var locals = {
-        csrfToken: req.csrfToken(),
-        scope: defaultScope
-    };
-
-    res.render('index', locals);
+    res.render('index');
 });
 
-app.post('/auth', function(req, res) {
+app.get('/auth', function(req, res) {
     // Authorization Request: https://tools.ietf.org/html/rfc6749#section-4.1.1
     var authCodeParams = querystring.stringify({
         response_type: "code",
         redirect_uri: getRedirectUri(req),
         client_id: process.env.CLIENT_ID,
-        scope: req.body.scope,
+        scope: "core:*:*",
         // Generate a secure state in production to prevent CSRF (https://tools.ietf.org/html/rfc6749#section-10.12)
         state: "f4c269a0-4a69-43c1-9405-86209c896fa0"
     });
@@ -89,7 +81,7 @@ app.get('/data', function(req, res) {
     var access_token = req.cookies[cookieName].accessToken;
 
     request
-        .get(process.env.RESOURCE_ENDPOINT)
+        .get(process.env.HOST_URL + '/d2l/api/lp/1.10/users/whoami')
         .set('Authorization', `Bearer ${access_token}`)
         .end(function(error, response) {
             if (error) {

@@ -9,15 +9,8 @@
     <div class="container">
         <h1>OAuth 2.0 Client Example</h1>
         <p>A simple app that uses the <a href="https://tools.ietf.org/html/rfc6749" target="_blank">OAuth 2.0 flow</a> to obtain access to Brightspace APIs.</p>
-        <form action="auth" method="post">
-            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-            <div class="form-group">
-                <label for="scope" class="control-label">Scope</label>
-                <input type="text" class="form-control" name="scope" id="scope" value="<%= scope %>"></input>
-            </div>
-            <div class="form-group">
-                <button class="btn btn-primary"">Get Data</button>
-            </div>
+        <form action="auth" method="get">
+            <button class="btn btn-primary">Get Data</button>
         </form>
     </div>
 </body>

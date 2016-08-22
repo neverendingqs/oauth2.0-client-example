@@ -20,8 +20,8 @@ These environment variables must be set:
   * The OAuth 2.0 client ID (available from the Brightspace OAuth 2.0 registration page)
 * CLIENT_SECRET
   * The OAuth 2.0 client secret (available from the Brightspace OAuth 2.0 registration page)
-* RESOURCE_ENDPOINT
-  * The endpoint that contains the resource of interest (e.g. `https://myschool.brightspace.com/d2l/api/lp/1.0/users/whoami`)
+* HOST_URL
+  * The URL of the Brightspace instance (e.g. `https://myschool.brightspace.com`)
 
 A file named `.devenv.json` with the following structure can be used to automatically set environment variables:
 
@@ -29,7 +29,7 @@ A file named `.devenv.json` with the following structure can be used to automati
 {
     "CLIENT_ID": "<client_id>",
     "CLIENT_SECRET": "<client_secret>",
-    "RESOURCE_ENDPOINT": "<resource_endpoint>"
+    "HOST_URL": "<host_url>"
 }
 ```
 
